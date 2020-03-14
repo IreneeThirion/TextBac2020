@@ -6,6 +6,7 @@ Created on Sun Mar  8 17:20:56 2020
 @author: irenee
 """
 
+# Importation de tous les modules nécéssaires
 import glob
 import os
 import numpy as np
@@ -16,21 +17,21 @@ from sklearn.datasets import load_files
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 
-# Create the list of Authors present in Corpus folder
+# Crée la liste des auteurs présents dans le dossier "Corpus"
 wildcard = 'Corpus/*'
 authors =  [os.path.basename(x) for x in glob.glob(wildcard)]
 
-# Get all the .txt files in Corpus subdirs
+# Récupère tous les fichiers .txt dans le dossier "Corpus"
 wildcard = 'Corpus/*/*.txt'
 paths = glob.glob(wildcard)
 
-# Organize these paths in a dictionary
+# Crée un dictionnaire avec tous ces chemins
 database = dict([(author, []) for author in authors])
 for path in paths:
     author_ = os.path.basename(os.path.dirname(path))
     database[author_].append(path)
 
-# Create docs (texts) and y (authors) from the database
+# Crée "docs" (textes) et y (auteurs) dans une base de données
 def readfile(filename):
     """"Read the file in filename and return the content as a string"""
     fichier = open(filename)
@@ -51,7 +52,7 @@ y = [key for key in
 docs_train, docs_test, y_train, y_test = train_test_split(
     docs, y, test_size=0.5)
 
-# TASK: Build a vectorizer that splits strings into sequence of 1 to 3
+# Build a vectorizer that splits strings into sequence of 1 to 3
 # characters instead of word tokens
 vectorizer = TfidfVectorizer(ngram_range=(1, 3), analyzer='char',
                              use_idf=False)
@@ -66,7 +67,7 @@ clf = Pipeline([
 # TASK: Fit the pipeline on the training set
 clf.fit(docs_train, y_train)
 
-# TASK: Predict the outcome on the testing set in a variable named y_predicted
+# L: Predict the outcome on the testing set in a variable named y_predicted
 y_predicted = clf.predict(docs_test)
 
 # Print the classification report
